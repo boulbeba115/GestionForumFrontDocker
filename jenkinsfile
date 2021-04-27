@@ -1,0 +1,32 @@
+pipeline{
+agent any
+tools {
+nodejs "node"
+}
+environment {
+REPO_URL= 'https://github.com/boulbeba115/GestionForumFrontDocker.git'
+}
+stages {
+stage ('SCM'){
+steps{
+git credentialsId: 'GIT-CREDENTIALS',
+url: 'https://github.com/boulbeba115/GestionForumFrontDocker.git'
+}
+}
+stage ('Build'){
+steps{
+sh '''
+npm install 
+npm run build '''
+}
+}
+stage ('deploy'){
+steps{
+sh '''
+docker-compose down
+docker-compose build
+docker-compose up -d '''
+}
+}
+}
+}
